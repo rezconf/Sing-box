@@ -1,4 +1,14 @@
 {
+  "log": {
+	    "disabled": false,
+            "level": "warn",
+            "output": "/tmp/sing-box.log",
+            "timestamp": true
+	},
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
   "dns": {
     "independent_cache": true,
     "rules": [
