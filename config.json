@@ -1,122 +1,140 @@
 {
-"log": {
-	    "disabled": false,
-            "level": "warn",
-            "output": "/tmp/sing-box.log",
-            "timestamp": true
-	},
-  "log": {
-    "level": "info",
-    "timestamp": true
-  },
   "dns": {
-    "servers": [
-      {
-        "tag": "google",
-        "address": "tls://8.8.8.8",
-		"address_resolver": "local",
-        "detour": "proxy"		
-      },
-      {
-        "tag": "local",
-        "address": "223.5.5.5",
-        "detour": "direct"
-      },
-      {
-        "tag": "block",
-        "address": "rcode://success"
-      }
-    ],
+    "independent_cache": true,
     "rules": [
       {
-        "geosite": "category-ads-all",
-        "server": "block",
-		"disable_cache": true
+        "domain": [
+          "00.00.00.00" //Your VPS’s IP
+        ],
+        "server": "dns-direct"
       },
       {
-        "outbound": "any",
-        "server": "local"
-      },
-      {
-        "geosite": "cn",
-        "server": "local"
+        "outbound": "direct",
+        "server": "dns-direct"
       }
-	],
-    "strategy": "ipv4_only"	
-  }, 
+    ],
+    "servers": [
+      {
+        "address": "tcp://1.1.1.1",
+        "address_resolver": "dns-direct",
+        "strategy": "ipv4_only",
+        "tag": "dns-remote"
+      },
+      {
+        "address": "local",
+        "address_resolver": "dns-local",
+        "detour": "direct",
+        "strategy": "ipv4_only",
+        "tag": "dns-direct"
+      },
+      {
+        "address": "local",
+        "detour": "direct",
+        "tag": "dns-local"
+      }
+    ]
+  },
   "inbounds": [
     {
-      "type": "tun",
-      "tag": "tun-in",
-      "inet4_address": "172.19.0.1/30",
-      "inet6_address": "fdfe:dcba:9876::1/126",
+      "listen": "127.0.0.1",
+      "listen_port": 2080,
+      "sniff": true,
+      "tag": "mixed-in",
+      "type": "mixed"
+    },
+    {
       "auto_route": true,
-      "strict_route": false,
-      "stack": "gvisor",
-      "sniff": true
+      "strict_route": true,
+      "domain_strategy": "",
+      "endpoint_independent_nat": false,
+      "inet4_address": "172.19.0.1/28",
+      "interface_name": "nekoray-tun",
+      "mtu": 1500,
+      "sniff": true,
+      "sniff_override_destination": false,
+      "stack": "system",
+      "tag": "tun-in",
+      "type": "tun"
     }
   ],
+  "log": {
+    "level": "error"
+  },
   "outbounds": [
     {
-      "type": "shadowsocks",
-      "tag": "proxy",
-      "method": "2022-blake3-chacha20-poly1305",
-      "password": "XTVsAyFnREiRn5hgrjUAu8a9dSsicFKYIJM+K8+Iv8g=",  //shadowsocks node password
       "detour": "shadowtls-out",
-      "multiplex": {
-        "enabled": true,
-        "max_connections": 4,
-        "min_streams": 4
+      "tag": "proxy",
+      "type": "trojan",
+      "password": "5b6299db-5406-4826-9aa7-ae619cf43962", //vless node password (uuid)
+      "transport": {
+        "service_name": "Service-Name",
+        "type": "grpc",
+        "idle_timeout": "5s",
+        "ping_timeout": "3s"
       }
     },
     {
-      "type": "shadowtls",
+      "password": "XTVsAyFnREiRn5hgrjUAu8a9dSsicFKYIJM+K8+Iv8g=", //shadowtls password
+      "server": "00.00.00.00", //Your VPS’s IP
+      "server_port": 443, //shadowtls Port
       "tag": "shadowtls-out",
-      "server": "00.00.00.00",   //Your VPS’s IP
-      "server_port": 443,   //shadowtls Port
-      "version": 3,
-      "password": "NZew3ZrmZjxullszmAKtfu+pZh0F1dxnIPcwlaStjyI=",   //shadowtls password
       "tls": {
         "enabled": true,
-        "server_name": "www.apple.com",   //Handshake server address
+        "server_name": "www.apple.com", //Handshake server address
         "utls": {
           "enabled": true,
           "fingerprint": "chrome"
         }
-      }
+      },
+      "type": "shadowtls",
+      "version": 3
     },
     {
-      "type": "direct",
-      "tag": "direct"
+      "tag": "direct",
+      "type": "direct"
     },
     {
-      "type": "block",
-      "tag": "block"
+      "tag": "bypass",
+      "type": "direct"
     },
     {
-      "type": "dns",
-      "tag": "dns-out"
+      "tag": "block",
+      "type": "block"
+    },
+    {
+      "tag": "dns-out",
+      "type": "dns"
     }
   ],
   "route": {
+    "auto_detect_interface": true,
+    "final": "proxy",
+    "geoip": {
+      "download_detour": "direct"
+    },
     "rules": [
       {
-        "protocol": "dns",
-        "outbound": "dns-out"
+        "outbound": "dns-out",
+        "protocol": "dns"
       },
       {
-        "geosite": "cn",
         "geoip": [
-          "private",
-          "cn"
+          "ir",
+          "private"
         ],
-        "outbound": "direct"
+        "outbound": "bypass"
       },
       {
-        "geosite": "category-ads-all",
-        "outbound": "block"
+        "ip_cidr": [
+          "224.0.0.0/3",
+          "ff00::/8"
+        ],
+        "outbound": "block",
+        "source_ip_cidr": [
+          "224.0.0.0/3",
+          "ff00::/8"
+        ]
       }
-    ],
-    "auto_detect_interface": true
-  }  
+    ]
+  }
 }
