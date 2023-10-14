@@ -74,7 +74,8 @@
     {
       "detour": "shadowtls-out",
       "tag": "proxy",
-      "type": "trojan",
+      "flow": "",    
+      "type": "vless",
       "password": "5b6299db-5406-4826-9aa7-ae619cf43962", //vless node password (uuid)
       "transport": {
         "service_name": "Service-Name",
