@@ -80,8 +80,8 @@
       "transport": {
         "service_name": "Service-Name",
         "type": "grpc",
-        "idle_timeout": "5s",
-        "ping_timeout": "3s"
+        "idle_timeout": "10s",
+        "ping_timeout": "5s"
       }
     },
     {
