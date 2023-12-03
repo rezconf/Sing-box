@@ -1,10 +1,11 @@
 {
+
   "log": {
-	    "disabled": false,
+      "disabled": false,
             "level": "warn",
             "output": "/tmp/sing-box.log",
             "timestamp": true
-	},
+  },
   "log": {
     "level": "info",
     "timestamp": true
@@ -26,102 +27,86 @@
     "servers": [
       {
         "address": "tcp://1.1.1.1",
-        "address_resolver": "dns-direct",
-        "strategy": "ipv4_only",
+        "strategy": "prefer_ipv4",
         "tag": "dns-remote"
       },
       {
-        "address": "local",
-        "address_resolver": "dns-local",
+        "address": "tcp://8.8.8.8",
         "detour": "direct",
-        "strategy": "ipv4_only",
+        "strategy": "prefer_ipv4",
         "tag": "dns-direct"
-      },
-      {
-        "address": "local",
-        "detour": "direct",
-        "tag": "dns-local"
       }
     ]
   },
-  "inbounds": [
-    {
-      "listen": "127.0.0.1",
-      "listen_port": 2080,
-      "sniff": true,
-      "tag": "mixed-in",
-      "type": "mixed"
-    },
-    {
-      "auto_route": true,
-      "strict_route": true,
-      "domain_strategy": "",
-      "endpoint_independent_nat": false,
-      "inet4_address": "172.19.0.1/28",
-      "interface_name": "nekoray-tun",
-      "mtu": 1500,
-      "sniff": true,
-      "sniff_override_destination": false,
-      "stack": "system",
-      "tag": "tun-in",
-      "type": "tun"
-    }
-  ],
+    "inbounds": [
+        {
+            "auto_route": true,
+            "strict_route": true,
+            "domain_strategy": "",
+            "endpoint_independent_nat": false,
+            "inet4_address": "172.19.0.1/28",
+            "interface_name": "nekoray-tun",
+            "mtu": 1500,
+            "sniff": true,
+            "sniff_override_destination": false,
+            "stack": "system",
+            "tag": "tun-in",
+            "type": "tun"
+        }
+    ],
   "log": {
     "level": "error"
   },
-  "outbounds": [
-    {
-      "detour": "shadowtls-out",
-      "tag": "proxy",
-      "flow": "",    
-      "type": "vless",
-      "password": "5b6299db-5406-4826-9aa7-ae619cf43962", //vless node password (uuid)
-      "transport": {
-        "service_name": "Service-Name",
-        "type": "grpc",
-        "idle_timeout": "10s",
-        "ping_timeout": "5s"
-      }
-    },
-    {
-      "password": "XTVsAyFnREiRn5hgrjUAu8a9dSsicFKYIJM+K8+Iv8g=", //shadowtls password
-      "server": "00.00.00.00", //Your VPS’s IP
-      "server_port": 443, //shadowtls Port
-      "tag": "shadowtls-out",
-      "tls": {
-        "enabled": true,
-        "server_name": "www.apple.com", //Handshake server address
-        "utls": {
-          "enabled": true,
-          "fingerprint": "chrome"
+    "outbounds": [
+        {
+            "detour": "hy2-out",
+            "flow": "",
+            "tag": "hy2",
+            "type": "vless",
+            "uuid": "5b6299db-5406-4826-9aa7-ae619cf43962", //vless node password (uuid)
+            "transport": {
+                "service_name": "Service-Name",
+                "type": "grpc",
+                "idle_timeout": "5s",
+                "ping_timeout": "3s"
+            }
+        },
+        {
+            "server": "00.00.00.00",  //Your VPS’s IP
+            "server_port": 443,
+            "password": "123456",
+            "tls": {
+                "enabled": true,
+                "server_name": "www.apple.com", //Handshake server address
+                "alpn": [
+                    "h3"
+                ],
+                "insecure": true
+            },
+            "type": "hysteria2",
+            "tag": "hy2-out"
+        },
+        {
+            "tag": "direct",
+            "type": "direct"
+        },
+        {
+            "tag": "bypass",
+            "type": "direct"
+        },
+        {
+            "tag": "block",
+            "type": "block"
+        },
+        {
+            "tag": "dns-out",
+            "type": "dns"
         }
-      },
-      "type": "shadowtls",
-      "version": 3
-    },
-    {
-      "tag": "direct",
-      "type": "direct"
-    },
-    {
-      "tag": "bypass",
-      "type": "direct"
-    },
-    {
-      "tag": "block",
-      "type": "block"
-    },
-    {
-      "tag": "dns-out",
-      "type": "dns"
-    }
-  ],
+    ],
   "route": {
     "auto_detect_interface": true,
-    "final": "proxy",
     "geoip": {
-      "download_detour": "direct"
+		"download_detour": "direct"
     },
     "rules": [
       {
