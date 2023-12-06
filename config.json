@@ -65,7 +65,7 @@
             "type": "vless",
             "uuid": "5b6299db-5406-4826-9aa7-ae619cf43962", //vless node password (uuid)
             "transport": {
-                "service_name": "Service-Name",
+                "service_name": "hy2-srv",  //Service name hare
                 "type": "grpc",
                 "idle_timeout": "5s",
                 "ping_timeout": "3s"
