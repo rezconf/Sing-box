@@ -1,6 +1,6 @@
 {
 
-  "log": {
+"log": {
       "disabled": false,
             "level": "warn",
             "output": "/tmp/sing-box.log",
@@ -73,8 +73,8 @@
         },
         {
             "server": "00.00.00.00",  //Your VPS’s IP
-            "server_port": 443,
-            "password": "123456",
+            "server_port": 8443,
+            "password": "123456789",
             "tls": {
                 "enabled": true,
                 "server_name": "www.apple.com", //Handshake server address
@@ -106,7 +106,8 @@
   "route": {
     "auto_detect_interface": true,
     "geoip": {
-		"download_detour": "direct"
+    "download_detour": "direct",
+    "download_url": "https://github.com/SagerNet/sing-geoip/releases/geoip.db"
     },
     "rules": [
       {
@@ -117,6 +118,9 @@
         "geoip": [
           "ir",
           "private"
+        ],
+        "domain_suffix": [
+          "google.com"
         ],
         "outbound": "bypass"
       },
