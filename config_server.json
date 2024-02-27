@@ -1,0 +1,38 @@
+{
+  "inbounds": [
+  {
+    "type": "hysteria2",
+    "tag": "hy2-in",
+    "listen": "::",
+    "listen_port": 8443,
+    "users": [
+      {
+        "name": "hy2",
+        "password": "123456789"
+      }
+    ],
+    "ignore_client_bandwidth": true,
+    "tls": {
+      "enabled": true,
+      "server_name": "www.tradingview.com",
+	  "alpn": [
+	  "h3"
+	  ],
+      "certificate_path": "/root/cert/www.apple.com/cert.pem",
+      "key_path": "/root/cert/www.apple.com/cert.pem.key"
+	},
+    "brutal_debug": false
+  },
+    ],
+  "log": {
+    "level": "fatal"
+  },
+  "outbounds": [
+    {
+        "tag": "direct",
+        "type": "direct",
+        "override_address": "127.0.0.1",
+        "override_port": 4650
+    }
+  ]
+}
