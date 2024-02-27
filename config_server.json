@@ -14,7 +14,7 @@
     "ignore_client_bandwidth": true,
     "tls": {
       "enabled": true,
-      "server_name": "www.tradingview.com",
+      "server_name": "www.apple.com",
 	  "alpn": [
 	  "h3"
 	  ],
