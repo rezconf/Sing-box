@@ -1,4 +1,4 @@
-# How to Bypass on OpenWRT using Sing-box ( unless, vless, trojan,ss )
+# How to Bypass on OpenWRT using Sing-box ( hy2, vless, trojan,ss )
 # How to Use It
 For more detailed usage instructions, please refer to the [Wiki](https://github.com/rezconf/Sing-box/wiki/How-to-Run).
 
