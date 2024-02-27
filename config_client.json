@@ -1,6 +1,5 @@
 {
-
-"log": {
+  "log": {
       "disabled": false,
             "level": "warn",
             "output": "/tmp/sing-box.log",
@@ -26,14 +25,14 @@
     ],
     "servers": [
       {
-        "address": "tcp://1.1.1.1",
-        "strategy": "prefer_ipv4",
+        "address": "tcp://1.1.1.2",
+        "strategy": "prefer_ipv6",
         "tag": "dns-remote"
       },
       {
         "address": "tcp://8.8.8.8",
         "detour": "direct",
-        "strategy": "prefer_ipv4",
+        "strategy": "prefer_ipv6",
         "tag": "dns-direct"
       }
     ]
@@ -59,11 +58,13 @@
   },
     "outbounds": [
         {
-            "detour": "hy2-out",
-            "flow": "",
-            "tag": "hy2",
             "type": "vless",
+            "tag": "vless-out",
+            "server": "00.00.00.00", //Your VPS’s IP
+            "server_port": 4650,
+            "detour": "hy2-out",
             "uuid": "5b6299db-5406-4826-9aa7-ae619cf43962", //vless node password (uuid)
+            "flow": "",
             "transport": {
                 "service_name": "hy2-srv",  //Service name hare
                 "type": "grpc",
@@ -72,7 +73,7 @@
             }
         },
         {
-            "server": "00.00.00.00",  //Your VPS’s IP
+            "server": "00.00.00.00", //Your VPS’s IP
             "server_port": 8443,
             "password": "123456789",
             "tls": {
