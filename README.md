@@ -5,8 +5,3 @@ For more detailed usage instructions, please refer to the [Wiki](https://github.
  ![image](https://github.com/rezconf/Sing-box/assets/39160983/2472b127-ec6a-47df-9a4b-4863c1b48835)
 
 
-<a href="https://github.com/rezconf/Sing-box/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=rezconf/Sing-box" />
-</a>
-
-Made with [contrib.rocks](https://contrib.rocks).
