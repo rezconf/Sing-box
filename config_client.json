@@ -26,13 +26,13 @@
     "servers": [
       {
         "address": "tcp://1.1.1.2",
-        "strategy": "prefer_ipv4",
+        "strategy": "ipv4_only",
         "tag": "dns-remote"
       },
       {
         "address": "tcp://8.8.8.8",
         "detour": "direct",
-        "strategy": "prefer_ipv4",
+        "strategy": "ipv4_only",
         "tag": "dns-direct"
       }
     ]
@@ -65,7 +65,7 @@
       "detour": "hy2-out",
       "uuid": "5b6299db-5406-4826-9aa7-ae619cf43962d",
       "transport": {
-        "service_name": "hy2-srv",
+        "service_name": "service-name",
         "type": "grpc",
         "idle_timeout": "5s",
         "ping_timeout": "3s"
