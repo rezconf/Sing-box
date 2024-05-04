@@ -14,7 +14,7 @@
     "rules": [
       {
         "domain": [
-          "00.00.00.00" //Your VPS’s IP
+          "domain.com"
         ],
         "server": "dns-direct"
       },
@@ -26,89 +26,92 @@
     "servers": [
       {
         "address": "tcp://1.1.1.2",
-        "strategy": "prefer_ipv6",
+        "strategy": "prefer_ipv4",
         "tag": "dns-remote"
       },
       {
         "address": "tcp://8.8.8.8",
         "detour": "direct",
-        "strategy": "prefer_ipv6",
+        "strategy": "prefer_ipv4",
         "tag": "dns-direct"
       }
     ]
   },
-    "inbounds": [
-        {
-            "auto_route": true,
-            "strict_route": true,
-            "domain_strategy": "",
-            "endpoint_independent_nat": false,
-            "inet4_address": "172.19.0.1/28",
-            "interface_name": "nekoray-tun",
-            "mtu": 1500,
-            "sniff": true,
-            "sniff_override_destination": false,
-            "stack": "system",
-            "tag": "tun-in",
-            "type": "tun"
-        }
-    ],
+  "inbounds": [
+    {
+      "auto_route": true,
+      "strict_route": true,
+      "domain_strategy": "",
+      "endpoint_independent_nat": false,
+      "inet4_address": "172.19.0.1/28",
+      "interface_name": "nekoray-tun",
+      "mtu": 1500,
+      "sniff": true,
+      "sniff_override_destination": false,
+      "stack": "system",
+      "tag": "tun-in",
+      "type": "tun"
+    }
+  ],
   "log": {
     "level": "error"
   },
-    "outbounds": [
-        {
-            "type": "vless",
-            "tag": "vless-out",
-            "server": "00.00.00.00", //Your VPS’s IP
-            "server_port": 4650,
-            "detour": "hy2-out",
-            "uuid": "5b6299db-5406-4826-9aa7-ae619cf43962", //vless node password (uuid)
-            "flow": "",
-            "transport": {
-                "service_name": "hy2-srv",  //Service name hare
-                "type": "grpc",
-                "idle_timeout": "5s",
-                "ping_timeout": "3s"
-            }
-        },
-        {
-            "server": "00.00.00.00", //Your VPS’s IP
-            "server_port": 8443,
-            "password": "123456789",
-            "tls": {
-                "enabled": true,
-                "server_name": "www.apple.com", //Handshake server address
-                "alpn": [
-                    "h3"
-                ],
-                "insecure": true
-            },
-            "type": "hysteria2",
-            "tag": "hy2-out"
-        },
-        {
-            "tag": "direct",
-            "type": "direct"
-        },
-        {
-            "tag": "bypass",
-            "type": "direct"
-        },
-        {
-            "tag": "block",
-            "type": "block"
-        },
-        {
-            "tag": "dns-out",
-            "type": "dns"
-        }
-    ],
+  "outbounds": [
+    {
+      "type": "vless",
+      "tag": "vless-out",
+      "server": "::1",
+      "server_port": 9930,
+      "detour": "hy2-out",
+      "uuid": "5b6299db-5406-4826-9aa7-ae619cf43962d",
+      "transport": {
+        "service_name": "hy2-srv",
+        "type": "grpc",
+        "idle_timeout": "5s",
+        "ping_timeout": "3s"
+      }
+    },
+    {
+      "server": "domain.com",
+      "server_port": 8443,
+      "obfs": {
+        "type": "salamander",
+        "password": "Fukkkkkkk"
+      },
+      "password": "your-password",
+      "tls": {
+        "enabled": true,
+        "server_name": "www.apple.com", //Handshake server address
+        "alpn": [
+          "h3"
+        ],
+        "insecure": true
+      },
+      "type": "hysteria2",
+      "tag": "hy2-out"
+    },
+    {
+      "tag": "direct",
+      "type": "direct"
+    },
+    {
+      "tag": "bypass",
+      "type": "direct"
+    },
+    {
+      "tag": "block",
+      "type": "block"
+    },
+    {
+      "tag": "dns-out",
+      "type": "dns"
+    }
+  ],
   "route": {
     "auto_detect_interface": true,
     "geoip": {
-    "download_detour": "direct",
-    "download_url": "https://github.com/SagerNet/sing-geoip/releases/geoip.db"
+      "download_detour": "direct",
+      "download_url": "https://github.com/SagerNet/sing-geoip/releases/geoip.db"
     },
     "rules": [
       {
